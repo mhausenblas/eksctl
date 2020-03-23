@@ -1,0 +1,1014 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="The official CLI for Amazon EKS">
+      
+      
+      
+        <meta name="author" content="eksctl authors">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.0">
+    
+    
+      
+        <title>Managing nodegroups - eksctl</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.0284f74d.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.01803549.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oxygen:300,400,400i,700|Oxygen+Mono&display=fallback">
+        <style>body,input{font-family:"Oxygen","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Oxygen Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="white" data-md-color-accent="light-blue">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#managing-nodegroups" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="eksctl" class="md-header-nav__button md-logo">
+          
+            <img src="../../assets/images/logo.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              eksctl
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Managing nodegroups
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/weaveworks/eksctl/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    weaveworks/eksctl
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="eksctl" class="md-nav__button md-logo">
+      
+        <img src="../../assets/images/logo.png" width="48" height="48">
+      
+    </a>
+    eksctl
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/weaveworks/eksctl/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    weaveworks/eksctl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../intro/" title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../gitops-quickstart/" title="GitOps Quickstart" class="md-nav__link">
+      GitOps Quickstart
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Usage
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Usage
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../creating-and-managing-clusters/" title="Creating and managing clusters" class="md-nav__link">
+      Creating and managing clusters
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Managing nodegroups
+      </label>
+    
+    <a href="./" title="Managing nodegroups" class="md-nav__link md-nav__link--active">
+      Managing nodegroups
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#managing-nodegroups" title="Managing nodegroups" class="md-nav__link">
+    Managing nodegroups
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-nodegroup-from-a-config-file" title="Creating a nodegroup from a config file" class="md-nav__link">
+    Creating a nodegroup from a config file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listing-nodegroups" title="Listing nodegroups" class="md-nav__link">
+    Listing nodegroups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodegroup-immutability" title="Nodegroup immutability" class="md-nav__link">
+    Nodegroup immutability
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaling" title="Scaling" class="md-nav__link">
+    Scaling
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-labels" title="Update labels" class="md-nav__link">
+    Update labels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deleting-and-draining" title="Deleting and draining" class="md-nav__link">
+    Deleting and draining
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodegroup-selection-in-config-files" title="Nodegroup selection in config files" class="md-nav__link">
+    Nodegroup selection in config files
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../cluster-upgrade/" title="Cluster Upgrades" class="md-nav__link">
+      Cluster Upgrades
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../autoscaling/" title="Auto Scaling" class="md-nav__link">
+      Auto Scaling
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../custom-ami-support/" title="Custom AMI Support" class="md-nav__link">
+      Custom AMI Support
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vpc-networking/" title="VPC Networking" class="md-nav__link">
+      VPC Networking
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../gpu-support/" title="GPU Support" class="md-nav__link">
+      GPU Support
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../spot-instances/" title="Spot instances" class="md-nav__link">
+      Spot instances
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3-9" type="checkbox" id="nav-3-9">
+    
+    <label class="md-nav__link" for="nav-3-9">
+      IAM
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-9">
+        IAM
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../iam-permissions-boundary/" title="IAM permissions boundary" class="md-nav__link">
+      IAM permissions boundary
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../iam-policies/" title="IAM policies" class="md-nav__link">
+      IAM policies
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../iam-identity-mappings/" title="IAM users and roles" class="md-nav__link">
+      IAM users and roles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../iamserviceaccounts/" title="IAM roles for service sccounts" class="md-nav__link">
+      IAM roles for service sccounts
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../customizing-the-kubelet/" title="Customizing kubelet configuration" class="md-nav__link">
+      Customizing kubelet configuration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../cloudwatch-cluster-logging/" title="CloudWatch logging" class="md-nav__link">
+      CloudWatch logging
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../windows-worker-nodes/" title="Windows worker nodes" class="md-nav__link">
+      Windows worker nodes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eks-managed-nodes/" title="EKS Managed Nodegroups" class="md-nav__link">
+      EKS Managed Nodegroups
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../fargate-support/" title="EKS Fargate Support" class="md-nav__link">
+      EKS Fargate Support
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../schema/" title="Schema" class="md-nav__link">
+      Schema
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../troubleshooting/" title="Troubleshooting" class="md-nav__link">
+      Troubleshooting
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../faq/" title="FAQ" class="md-nav__link">
+      FAQ
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../experimental/gitops/" title="Experimental" class="md-nav__link">
+      Experimental
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/reusing-iam-and-vpc/" title="Custom IAM and VPC config" class="md-nav__link">
+      Custom IAM and VPC config
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../community/" title="Community" class="md-nav__link">
+      Community
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#managing-nodegroups" title="Managing nodegroups" class="md-nav__link">
+    Managing nodegroups
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-nodegroup-from-a-config-file" title="Creating a nodegroup from a config file" class="md-nav__link">
+    Creating a nodegroup from a config file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#listing-nodegroups" title="Listing nodegroups" class="md-nav__link">
+    Listing nodegroups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodegroup-immutability" title="Nodegroup immutability" class="md-nav__link">
+    Nodegroup immutability
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaling" title="Scaling" class="md-nav__link">
+    Scaling
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-labels" title="Update labels" class="md-nav__link">
+    Update labels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deleting-and-draining" title="Deleting and draining" class="md-nav__link">
+    Deleting and draining
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodegroup-selection-in-config-files" title="Nodegroup selection in config files" class="md-nav__link">
+    Nodegroup selection in config files
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/weaveworks/eksctl/edit/master/docs/usage/managing-nodegroups.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>Managing nodegroups</h1>
+                
+                <h2 id="managing-nodegroups">Managing nodegroups<a class="headerlink" href="#managing-nodegroups" title="Permanent link">&para;</a></h2>
+<p>You can add one or more nodegroups in addition to the initial nodegroup created along with the cluster.</p>
+<p>To create an additional nodegroup, use:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="k">create</span> <span class="n">nodegroup</span> <span class="c1">--cluster=&lt;clusterName&gt; [--name=&lt;nodegroupName&gt;]</span>
+</pre></div>
+</td></tr></table>
+
+<blockquote>
+<p>NOTE: By default, new nodegroups inherit the version from the control plane (<code>--version=auto</code>), but you can specify a different
+version e.g. <code>--version=1.10</code>, you can also use <code>--version=latest</code> to force use of whichever is the latest version.</p>
+</blockquote>
+<p>Additionally, you can use the same config file used for <code>eksctl create cluster</code>:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="k">create</span> <span class="n">nodegroup</span> <span class="c1">--config-file=&lt;path&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>If there are multiple nodegroups specified in the file, you can select
+a subset via <code>--include=&lt;glob,glob,...&gt;</code> and <code>--exclude=&lt;glob,glob,...&gt;</code>:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nv">eksctl</span> <span class="nv">create</span> <span class="nv">nodegroup</span> <span class="o">--</span><span class="nv">config</span><span class="o">-</span><span class="nv">file</span><span class="o">=&lt;</span><span class="nv">path</span><span class="o">&gt;</span> <span class="o">--</span><span class="k">include</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">ng-prod-*-??</span><span class="s1">&#39;</span> <span class="o">--</span><span class="nv">exclude</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">ng-test-1-ml-a,ng-test-2-?</span><span class="s1">&#39;</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="creating-a-nodegroup-from-a-config-file">Creating a nodegroup from a config file<a class="headerlink" href="#creating-a-nodegroup-from-a-config-file" title="Permanent link">&para;</a></h3>
+<p>Nodegroups can also be created through a cluster definition or config file. Given the following example config file
+and an existing cluster called ``dev-cluster:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eksctl.io/v1alpha5</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ClusterConfig</span>
+
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dev-cluster</span>
+  <span class="nt">region</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">eu-north-1</span>
+
+<span class="nt">nodeGroups</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ng-1-workers</span>
+    <span class="nt">labels</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span> <span class="nv">workers</span> <span class="p p-Indicator">}</span>
+    <span class="nt">instanceType</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">m5.xlarge</span>
+    <span class="nt">desiredCapacity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+    <span class="nt">privateNetworking</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ng-2-builders</span>
+    <span class="nt">labels</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt"> role</span><span class="p">:</span> <span class="nv">builders</span> <span class="p p-Indicator">}</span>
+    <span class="nt">instanceType</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">m5.2xlarge</span>
+    <span class="nt">desiredCapacity</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+    <span class="nt">privateNetworking</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</td></tr></table>
+
+<p>The nodegroups <code>ng-1-workers</code> and <code>ng-2-builders</code> can be created with this command:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>eksctl create nodegroup --config-file<span class="o">=</span>dev-cluster.yaml
+</pre></div>
+</td></tr></table>
+
+<h3 id="listing-nodegroups">Listing nodegroups<a class="headerlink" href="#listing-nodegroups" title="Permanent link">&para;</a></h3>
+<p>To list the details about a nodegroup or all of the nodegroups, use:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="k">get</span> <span class="n">nodegroup</span> <span class="c1">--cluster=&lt;clusterName&gt; [--name=&lt;nodegroupName&gt;]</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="nodegroup-immutability">Nodegroup immutability<a class="headerlink" href="#nodegroup-immutability" title="Permanent link">&para;</a></h3>
+<p>By design, nodegroups are immutable. This means that if you need to change something (other than scaling) like the
+AMI or the instance type of a nodegroup, you would need to create a new nodegroup with the desired changes, move the
+load and delete the old one. Check <a href="#deleting-and-draining">Deleting and draining</a>.</p>
+<h3 id="scaling">Scaling<a class="headerlink" href="#scaling" title="Permanent link">&para;</a></h3>
+<p>A nodegroup can be scaled by using the <code>eksctl scale nodegroup</code> command:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="k">scale</span> <span class="n">nodegroup</span> <span class="c1">--cluster=&lt;clusterName&gt; --nodes=&lt;desiredCount&gt; --name=&lt;nodegroupName&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>For example, to scale nodegroup <code>ng-a345f4e1</code> in <code>cluster-1</code> to 5 nodes, run:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="k">scale</span> <span class="n">nodegroup</span> <span class="c1">--cluster=cluster-1 --nodes=5 ng-a345f4e1</span>
+</pre></div>
+</td></tr></table>
+
+<p>If the desired number of nodes is greater than the current maximum set on the ASG then the maximum value will be increased to match the number of requested nodes. And likewise for the minimum.</p>
+<p>Scaling a nodegroup works by modifying the nodegroup CloudFormation stack via a ChangeSet.</p>
+<blockquote>
+<p>NOTE: Scaling a nodegroup down/in (i.e. reducing the number of nodes) may result in errors as we rely purely on changes to the ASG. This means that the node(s) being removed/terminated aren't explicitly drained. This may be an area for improvement in the future.</p>
+</blockquote>
+<p>You can also enable SSH, ASG access and other feature for each particular nodegroup, e.g.:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="k">create</span> <span class="n">nodegroup</span> <span class="c1">--cluster=cluster-1 --node-labels=&quot;autoscaling=enabled,purpose=ci-worker&quot; --asg-access --full-ecr-access --ssh-access</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="update-labels">Update labels<a class="headerlink" href="#update-labels" title="Permanent link">&para;</a></h3>
+<p>There are no specific commands in <code>eksctl</code>to update the labels of a nodegroup but that can easily be achieved using
+<code>kubectl</code>:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>kubectl label nodes -l alpha.eksctl.io/nodegroup-name<span class="o">=</span>ng-1 new-label<span class="o">=</span>foo
+</pre></div>
+</td></tr></table>
+
+<h3 id="deleting-and-draining">Deleting and draining<a class="headerlink" href="#deleting-and-draining" title="Permanent link">&para;</a></h3>
+<p>To delete a nodegroup, run:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="k">delete</span> <span class="n">nodegroup</span> <span class="c1">--cluster=&lt;clusterName&gt; --name=&lt;nodegroupName&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<blockquote>
+<p>NOTE: this will drain all pods from that nodegroup before the instances are deleted.</p>
+</blockquote>
+<p>All nodes are cordoned and all pods are evicted from a nodegroup on deletion,
+but if you need to drain a nodegroup without deleting it, run:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="n">drain</span> <span class="n">nodegroup</span> <span class="c1">--cluster=&lt;clusterName&gt; --name=&lt;nodegroupName&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>To uncordon a nodegroup, run:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><span class="n">eksctl</span> <span class="n">drain</span> <span class="n">nodegroup</span> <span class="c1">--cluster=&lt;clusterName&gt; --name=&lt;nodegroupName&gt; --undo</span>
+</pre></div>
+</td></tr></table>
+
+<h3 id="nodegroup-selection-in-config-files">Nodegroup selection in config files<a class="headerlink" href="#nodegroup-selection-in-config-files" title="Permanent link">&para;</a></h3>
+<p>To perform a create or delete operation on only a subset of the nodegroups specified in a config file, there are two
+CLI flags: <code>include</code> and <code>exclude</code>. These accept a list of globs such as <code>ng-dev-*</code>, for example.</p>
+<p>Using the example config file above, one can create all the workers nodegroup except the workers one with the following
+command:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>eksctl create nodegroup --config-file<span class="o">=</span>dev-cluster.yaml --exclude<span class="o">=</span>ng-1-workers
+</pre></div>
+</td></tr></table>
+
+<p>Or one could delete the builders nodegroup with:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span>eksctl delete nodegroup --config-file<span class="o">=</span>dev-cluster.yaml --include<span class="o">=</span>ng-2-builders --approve
+</pre></div>
+</td></tr></table>
+
+<p>In this case, we also need to supply the <code>--approve</code> command to actually delete the nodegroup.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../creating-and-managing-clusters/" title="Creating and managing clusters" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Creating and managing clusters
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../cluster-upgrade/" title="Cluster Upgrades" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Cluster Upgrades
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020 Weaveworks
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://twitter.com/weaveworks" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.245445c6.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>
