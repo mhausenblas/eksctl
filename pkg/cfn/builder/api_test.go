@@ -272,6 +272,17 @@ func newStackWithOutputs(outputs map[string]string) cfn.Stack {
 	return s
 }
 
+// completeKubeletConfig amends changes that nodebootstrap.makeKubeletConfigYAML() would do.
+func completeKubeletConfig(kubeletConfigAssetContent []byte, clusterDNS string) string {
+	return string(kubeletConfigAssetContent) +
+		"\n" +
+		"clusterDNS: [" + clusterDNS + "]\n" +
+		"kubeReserved:\n" +
+		"  cpu: 70m\n" +
+		"  ephemeral-storage: 1Gi\n" +
+		"  memory: 1843Mi\n"
+}
+
 var _ = Describe("CloudFormation template builder API", func() {
 	var (
 		cc   *cloudconfig.CloudConfig
@@ -394,7 +405,7 @@ var _ = Describe("CloudFormation template builder API", func() {
 			Metadata: &api.ClusterMeta{
 				Region:  "us-west-2",
 				Name:    clusterName,
-				Version: "1.14",
+				Version: "1.15",
 			},
 			Status: &api.ClusterStatus{
 				Endpoint:                 endpoint,
@@ -1509,7 +1520,7 @@ var _ = Describe("CloudFormation template builder API", func() {
 
 			Expect(ltd.NetworkInterfaces).To(HaveLen(1))
 			Expect(ltd.NetworkInterfaces[0].DeviceIndex).To(Equal(0))
-			Expect(ltd.NetworkInterfaces[0].AssociatePublicIpAddress).To(BeTrue())
+			Expect(ltd.NetworkInterfaces[0].AssociatePublicIpAddress).To(BeFalse())
 
 			Expect(ngTemplate.Resources["SSHIPv4"].Properties.CidrIp).To(Equal("0.0.0.0/0"))
 			Expect(ngTemplate.Resources["SSHIPv4"].Properties.FromPort).To(Equal(22))
@@ -1596,7 +1607,7 @@ var _ = Describe("CloudFormation template builder API", func() {
 
 			Expect(ltd.NetworkInterfaces).To(HaveLen(1))
 			Expect(ltd.NetworkInterfaces[0].DeviceIndex).To(Equal(0))
-			Expect(ltd.NetworkInterfaces[0].AssociatePublicIpAddress).To(BeTrue())
+			Expect(ltd.NetworkInterfaces[0].AssociatePublicIpAddress).To(BeFalse())
 
 			Expect(ngTemplate.Resources).ToNot(HaveKey("SSHIPv4"))
 
@@ -1717,10 +1728,7 @@ var _ = Describe("CloudFormation template builder API", func() {
 
 			kubeletConfigAssetContent, err := nodebootstrap.Asset("kubelet.yaml")
 			Expect(err).ToNot(HaveOccurred())
-
-			kubeletConfigAssetContentString := string(kubeletConfigAssetContent) +
-				"\n" +
-				"clusterDNS: [10.100.0.10]\n"
+			kubeletConfigAssetContentString := completeKubeletConfig(kubeletConfigAssetContent, "10.100.0.10")
 
 			kubeletConfig := getFile(cc, "/etc/eksctl/kubelet.yaml")
 			Expect(kubeletConfig).ToNot(BeNil())
@@ -1959,10 +1967,7 @@ var _ = Describe("CloudFormation template builder API", func() {
 
 			kubeletConfigAssetContent, err := nodebootstrap.Asset("kubelet.yaml")
 			Expect(err).ToNot(HaveOccurred())
-
-			kubeletConfigAssetContentString := string(kubeletConfigAssetContent) +
-				"\n" +
-				"clusterDNS: [172.20.0.10]\n"
+			kubeletConfigAssetContentString := completeKubeletConfig(kubeletConfigAssetContent, "172.20.0.10")
 
 			kubeletConfig := getFile(cc, "/etc/eksctl/kubelet.yaml")
 			Expect(kubeletConfig).ToNot(BeNil())

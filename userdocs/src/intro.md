@@ -19,8 +19,8 @@ eksctl create cluster --name=cluster-1 --nodes=4
 
 ```
 
-EKS supports versions `1.12`, `1.13`, `1.14` (default) and `1.15`.
-With `eksctl` you can deploy either version by passing `--version`.
+EKS supports versions `1.12`, `1.13`, `1.14` and `1.15` (default).
+With `eksctl` you can deploy any of the supported versions by passing `--version`.
 
 ```
 
@@ -186,13 +186,16 @@ You will also need [AWS IAM Authenticator for Kubernetes](https://github.com/kub
 
 ### Shell Completion
 
+#### Bash
+
 To enable bash completion, run the following, or put it in `~/.bashrc` or `~/.profile`:
 
 ```
 . <(eksctl completion bash)
 ```
+#### Zsh
 
-Or for zsh, run:
+For zsh completion, please run:
 
 ```
 mkdir -p ~/.zsh/completion/
@@ -213,6 +216,15 @@ compinit
 ```
 
 To make the above persistent, run the first two lines, and put the above in `~/.zshrc`.
+
+#### Fish
+
+The below commands can be used for fish auto completion:
+
+```
+mkdir -p ~/.config/fish/completions
+eksctl completion fish > ~/.config/fish/completions/eksctl.fish
+```
 
 ## Feature list
 

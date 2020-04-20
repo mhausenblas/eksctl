@@ -238,6 +238,17 @@ FargateProfileSelector:
   required:
   - namespace
   type: object
+Fields:
+  additionalProperties: false
+  properties:
+    Map:
+      patternProperties:
+        .*:
+          $ref: '#/definitions/Fields'
+      type: object
+  required:
+  - Map
+  type: object
 IPNet:
   additionalProperties: false
   properties:
@@ -279,10 +290,27 @@ ListMeta:
   properties:
     continue:
       type: string
+    remainingItemCount:
+      type: integer
     resourceVersion:
       type: string
     selfLink:
       type: string
+  type: object
+ManagedFieldsEntry:
+  additionalProperties: false
+  properties:
+    apiVersion:
+      type: string
+    fields:
+      $ref: '#/definitions/Fields'
+      $schema: http://json-schema.org/draft-04/schema#
+    manager:
+      type: string
+    operation:
+      type: string
+    time:
+      $ref: '#/definitions/Time'
   type: object
 ManagedNodeGroup:
   additionalProperties: false
@@ -307,6 +335,8 @@ ManagedNodeGroup:
       type: object
     name:
       type: string
+    privateNetworking:
+      type: boolean
     ssh:
       $ref: '#/definitions/NodeGroupSSH'
     tags:
@@ -319,6 +349,7 @@ ManagedNodeGroup:
   required:
   - name
   - ScalingConfig
+  - privateNetworking
   type: object
 Network:
   additionalProperties: false
@@ -581,6 +612,11 @@ ObjectMeta:
         .*:
           type: string
       type: object
+    managedFields:
+      items:
+        $ref: '#/definitions/ManagedFieldsEntry'
+        $schema: http://json-schema.org/draft-04/schema#
+      type: array
     name:
       type: string
     namespace:
